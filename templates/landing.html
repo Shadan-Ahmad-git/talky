@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talky - Your Intelligent AI Assistant</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            overflow-x: hidden;
+            overflow-y: auto;
+            height: 100%;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(30, 30, 46, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .navbar-logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        
+        .navbar-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .navbar-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+        
+        .navbar-link:hover {
+            color: var(--primary-color);
+            background: rgba(83, 54, 218, 0.1);
+        }
+        
+        .landing-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            padding-top: 100px; /* Account for navbar */
+            color: var(--text-primary);
+            width: 100%;
+        }
+        .landing-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .landing-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-secondary);
+            border: 3px solid var(--primary-color);
+            box-shadow: 0 0 30px rgba(83, 54, 218, 0.3);
+        }
+        .landing-logo img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+        .landing-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #5436da 0%, #9d7bf5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .landing-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            width: 100%;
+            margin-bottom: 3rem;
+        }
+        .feature-card {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(83, 54, 218, 0.2);
+        }
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .comparison-section {
+            max-width: 1000px;
+            width: 100%;
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-bottom: 3rem;
+            border: 1px solid var(--border-color);
+        }
+        .comparison-title {
+            font-size: 2rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .comparison-table th {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+        .check-mark {
+            color: #4ade80;
+            font-size: 1.2rem;
+        }
+        .cross-mark {
+            color: #f87171;
+            font-size: 1.2rem;
+        }
+        .cta-section {
+            text-align: center;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: background 0.3s ease, transform 0.3s ease;
+            margin: 0 1rem;
+        }
+        .cta-button:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+        .cta-button.secondary {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        .cta-button.secondary:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+            .navbar-logo span {
+                display: none;
+            }
+            .navbar-links {
+                gap: 0.75rem;
+            }
+            .navbar-link {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+            .navbar-link i {
+                font-size: 1rem;
+            }
+            .landing-title {
+                font-size: 2.5rem;
+            }
+            .landing-subtitle {
+                font-size: 1.2rem;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .comparison-table {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="navbar-logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Talky">
+            <span>Talky</span>
+        </a>
+        <div class="navbar-links">
+            <a href="/chat" class="navbar-link"><i class="fas fa-home"></i> Home</a>
+            <a href="/dashboard" class="navbar-link"><i class="fas fa-chart-bar"></i> Dashboard</a>
+            <a href="/settings" class="navbar-link"><i class="fas fa-cog"></i> Settings</a>
+        </div>
+    </nav>
+    
+    <div class="landing-container">
+        <div class="landing-header">
+            <div class="landing-logo">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Talky">
+            </div>
+            <h1 class="landing-title">Talky</h1>
+            <p class="landing-subtitle">Your Intelligent AI Assistant That Actually Gets Things Done</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <h3 class="feature-title">Task Automation</h3>
+                <p class="feature-description">
+                    Talky doesn't just chat—it acts. Send emails, create PDFs, search the web, manage your calendar, and handle real-world tasks automatically.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-microphone"></i>
+                </div>
+                <h3 class="feature-title">Voice & Image Support</h3>
+                <p class="feature-description">
+                    Interact naturally with voice messages and image recognition. Talky understands what you say and sees what you show, making communication effortless.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-plug"></i>
+                </div>
+                <h3 class="feature-title">Multi-Platform Access</h3>
+                <p class="feature-description">
+                    Use Talky on Telegram, web interface, or both. Your data syncs seamlessly across platforms, giving you access wherever you are.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+                <h3 class="feature-title">ERP Integration</h3>
+                <p class="feature-description">
+                    Check attendance, view timetables, browse cafeteria menus, and access your institution's data—all through natural conversation.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3 class="feature-title">Smart Planning</h3>
+                <p class="feature-description">
+                    Powered by A* search algorithms and explainable AI, Talky plans and executes complex multi-step tasks intelligently.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-check-double"></i>
+                </div>
+                <h3 class="feature-title">Todo Management</h3>
+                <p class="feature-description">
+                    Manage your tasks from anywhere. Add, complete, and track todos through both Telegram and web interface with full synchronization.
+                </p>
+            </div>
+        </div>
+
+        <div class="comparison-section">
+            <h2 class="comparison-title">Why Talky is Better Than ChatGPT</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>ChatGPT</th>
+                        <th>Talky</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Task Execution</strong></td>
+                        <td><i class="fas fa-times cross-mark"></i> Chat only</td>
+                        <td><i class="fas fa-check check-mark"></i> Executes real tasks</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email & PDF Generation</strong></td>
+                        <td><i class="fas fa-times cross-mark"></i> Not available</td>
+                        <td><i class="fas fa-check check-mark"></i> Full support</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Voice Interaction</strong></td>
+                        <td><i class="fas fa-times cross-mark"></i> Not Integrated</td>
+                        <td><i class="fas fa-check check-mark"></i> Full voice support</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Image Recognition</strong></td>
+                        <td><i class="fas fa-times cross-mark"></i> Paid feature</td>
+                        <td><i class="fas fa-check check-mark"></i> Free & local</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ERP Integration</strong></td>
+                        <td><i class="fas fa-times cross-mark"></i> Not available</td>
+                        <td><i class="fas fa-check check-mark"></i> Built-in</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Multi-Platform</strong></td>
+                        <td><i class="fas fa-times cross-mark"></i> Web only</td>
+                        <td><i class="fas fa-check check-mark"></i> Telegram + Web</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Todo Management</strong></td>
+                        <td><i class="fas fa-times cross-mark"></i> Not available</td>
+                        <td><i class="fas fa-check check-mark"></i> Full sync</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Self-Hosted</strong></td>
+                        <td><i class="fas fa-times cross-mark"></i> Cloud only</td>
+                        <td><i class="fas fa-check check-mark"></i> Your control</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cost</strong></td>
+                        <td><i class="fas fa-times cross-mark"></i> Subscription</td>
+                        <td><i class="fas fa-check check-mark"></i> Free & open</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="cta-section">
+            <a href="/chat" class="cta-button">Start Chatting</a>
+            <a href="/dashboard" class="cta-button secondary">View Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Talky - AI Assistant</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button class="btn-close-sidebar" id="closeSidebarBtn" title="Close Sidebar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="sidebar-content">
+                <button class="btn-new-chat" id="newChatBtn">
+                    <i class="fas fa-plus"></i> New Chat
+                </button>
+                <div class="status-indicator">
+                    <span class="status-dot" id="statusDot"></span>
+                    <span id="statusText">Connecting...</span>
+                </div>
+                <div class="history-section">
+                    <h3 class="history-title">Chat History</h3>
+                    <div class="history-list" id="historyList">
+                        <!-- History items will be added here -->
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-area">
+            <div class="chat-header">
+                <button class="btn-icon" id="toggleSidebar" title="Show History">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="/" class="btn-home" title="Home">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="welcome-message">
+                    <div class="welcome-content">
+                        <div class="welcome-logo">
+                            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Talky" class="welcome-logo-img" onerror="this.style.display='none';">
+                        </div>
+                        <h1 id="welcomeText">How can I help you today?</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="processing-indicator" id="processingIndicator">
+                <i class="fas fa-spinner fa-spin"></i>
+                <span id="processingText"></span>
+            </div>
+            
+            <button class="btn-end-audio" id="endAudioBtn" style="display: none;" title="End audio">
+                <i class="fas fa-stop"></i> End
+            </button>
+
+            <div class="chat-input-container">
+                <div class="image-preview" id="imagePreview" style="display: none;">
+                    <img id="previewImage" src="" alt="Preview">
+                    <button class="btn-remove-image" id="removeImage">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="input-wrapper">
+                    <div class="input-toolbar">
+                        <button class="btn-icon" id="voiceBtn" title="Record Voice">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <button class="btn-icon" id="imageBtn" title="Upload Image">
+                            <i class="fas fa-image"></i>
+                        </button>
+                        <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                    </div>
+                    <textarea 
+                        id="messageInput" 
+                        placeholder="Message Talky..."
+                        rows="1"
+                    ></textarea>
+                    <button class="btn-send" id="sendBtn" title="Send">
+                        <i class="fas fa-arrow-up"></i>
+                    </button>
+                </div>
+                <div class="voice-recording" id="voiceRecording" style="display: none;">
+                    <div class="recording-indicator">
+                        <span class="recording-dot"></span>
+                        <span>Recording...</span>
+                    </div>
+                    <button class="btn-stop" id="stopRecording">Stop</button>
+                    <button class="btn-cancel" id="cancelRecording">Cancel</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
+

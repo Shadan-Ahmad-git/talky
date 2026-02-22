@@ -341,3 +341,9 @@ This project is for educational purposes.
 - [ ] Support for more languages
 - [ ] Webhook deployment option
 - [ ] Mobile app integration
+
+## Contributors
+
+Reetam Dan  
+Shadan Ahmad 
+
